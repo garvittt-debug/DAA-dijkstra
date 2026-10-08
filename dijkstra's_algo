@@ -1,0 +1,90 @@
+//GARVIT GANGWAR
+//25/DA/027
+#include <iostream>
+using namespace std;
+
+#define INF 9999
+
+void dijkstra(int graph[10][10], int n, int source)
+{
+    int distance[10];
+    bool visited[10];
+
+    // Initialize
+    for (int i = 0; i < n; i++)
+    {
+        distance[i] = graph[source][i];
+        visited[i] = false;
+    }
+
+    distance[source] = 0;
+    visited[source] = true;
+
+    // Find shortest paths
+    for (int i = 1; i < n; i++)
+    {
+        int min = INF;
+        int next = -1;
+
+        // Find minimum distance vertex
+        for (int j = 0; j < n; j++)
+        {
+            if (!visited[j] && distance[j] < min)
+            {
+                min = distance[j];
+                next = j;
+            }
+        }
+
+        if (next == -1)
+            break;
+
+        visited[next] = true;
+
+        // Update distances
+        for (int j = 0; j < n; j++)
+        {
+            if (!visited[j] &&
+                graph[next][j] != INF &&
+                distance[next] + graph[next][j] < distance[j])
+            {
+                distance[j] = distance[next] + graph[next][j];
+            }
+        }
+    }
+
+    // Display result
+    cout << "\nShortest distances from vertex " << source << ":\n";
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << "To vertex " << i << " = " << distance[i] << endl;
+    }
+}
+
+int main()
+{
+    int graph[10][10];
+    int n, source;
+
+    cout << "Enter number of vertices: ";
+    cin >> n;
+
+    cout << "Enter adjacency matrix:\n";
+    cout << "(Enter 9999 if there is no edge)\n";
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            cin >> graph[i][j];
+        }
+    }
+
+    cout << "Enter source vertex: ";
+    cin >> source;
+
+    dijkstra(graph, n, source);
+
+    return 0;
+}
